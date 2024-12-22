@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Profile</title>
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2c2c2c;
+            color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #3b5323;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        .container {
+            padding: 20px;
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #3b5323;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+        .container h1 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin: 10px 0 5px;
+        }
+        input, textarea, select {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        textarea {
+            height: 200px;
+        }
+        button {
+            background-color: #556b2f;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #6b8e23;
+        }
+        .photo-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .photo-preview img {
+            max-width: 100px;
+            border-radius: 5px;
+        }
+        .photo-preview .preview-container {
+            position: relative;
+        }
+        .photo-preview .preview-container button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .actions {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Add Profile</h1>
+    </div>
+    <div class="container">
+        <form action="submit_profile.php" method="post" enctype="multipart/form-data">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="branch">Branch of Military</label>
+            <select id="branch" name="branch" required>
+                <option value="U.S. Army">U.S. Army</option>
+                <option value="U.S. Navy">U.S. Navy</option>
+                <option value="U.S. Air Force">U.S. Air Force</option>
+                <option value="U.S. Marines">U.S. Marines</option>
+                <option value="U.S. Coast Guard">U.S. Coast Guard</option>
+            </select>
+
+            <label for="dob">Date of Birth</label>
+            <input type="date" id="dob" name="dob" required>
+
+            <label for="dod">Date of Death (if applicable)</label>
+            <input type="date" id="dod" name="dod">
+
+            <label for="hometown">Hometown</label>
+            <input type="text" id="hometown" name="hometown" required>
+
+            <label for="bio">Bio</label>
+            <textarea id="bio" name="bio" rows="10" required></textarea>
+
+            <label for="photos">Upload Photos (up to 5)</label>
+            <input type="file" id="photos" name="photos[]" accept="image/*" multiple required>
+            <div class="photo-preview" id="photo-preview"></div>
+
+            <div class="actions">
+                <button type="submit">Save Profile</button>
+                <button type="button" onclick="window.location.href='dashboard.html';">Cancel</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#bio'))
+            .catch(error => {
+                console.error(error);
+            });
+
+        const photosInput = document.getElementById('photos');
+        const previewContainer = document.getElementById('photo-preview');
+
+        photosInput.addEventListener('change', () => {
+            const maxFiles = 5;
+            if (photosInput.files.length > maxFiles) {
+                alert(`You can only upload up to ${maxFiles} photos.`);
+                photosInput.value = '';
+                previewContainer.innerHTML = '';
+                return;
+            }
+
+            previewContainer.innerHTML = '';
+            Array.from(photosInput.files).forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const previewDiv = document.createElement('div');
+                    previewDiv.classList.add('preview-container');
+
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = file.name;
+
+                    const removeButton = document.createElement('button');
+                    removeButton.innerText = '×';
+                    removeButton.addEventListener('click', () => {
+                        const dataTransfer = new DataTransfer();
+                        const files = Array.from(photosInput.files);
+                        files.splice(index, 1);
+                        files.forEach((f) => dataTransfer.items.add(f));
+                        photosInput.files = dataTransfer.files;
+                        previewDiv.remove();
+                    });
+
+                    previewDiv.appendChild(img);
+                    previewDiv.appendChild(removeButton);
+                    previewContainer.appendChild(previewDiv);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
+</body>
+</html>

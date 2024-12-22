@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Display</title>
+    <style>
+        :root {
+            --background-light: #f4f4f0;
+            --text-light: #2d2d2a;
+            --header-light: #556b2f;
+            --nav-light: #6b8e23;
+            --nav-hover-light: #ffd700;
+            --card-light: #fafafa;
+            --shadow-light: rgba(0, 0, 0, 0.1);
+
+            --background-dark: #1c1c1c;
+            --text-dark: #c0c0c0;
+            --header-dark: #3b5323;
+            --nav-dark: #556b2f;
+            --nav-hover-dark: #ffa500;
+            --card-dark: #2f2f2f;
+            --shadow-dark: rgba(0, 0, 0, 0.5);
+        }
+
+        body {
+            font-family: 'Verdana', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-light);
+            color: var(--text-light);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: var(--card-light);
+            box-shadow: 0 4px 10px var(--shadow-light);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 2px solid var(--header-light);
+        }
+        .header {
+            background-color: var(--header-light);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 1.8em;
+            text-transform: uppercase;
+        }
+        .nav {
+            display: flex;
+            justify-content: center;
+            background-color: var(--nav-light);
+            padding: 10px 0;
+            gap: 20px;
+        }
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em;
+            text-transform: uppercase;
+        }
+        .nav a:hover {
+            color: var(--nav-hover-light);
+            text-decoration: underline;
+        }
+        .profile-photo {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            background-color: #f0f0f0;
+        }
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .carousel img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: auto;
+            box-shadow: 0 2px 5px var(--shadow-light);
+        }
+        .carousel-controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+        }
+        .carousel-controls button {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .content {
+            padding: 25px;
+        }
+        .content h2 {
+            margin-top: 0;
+            color: var(--header-light);
+            font-size: 1.5em;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--header-light);
+            padding-bottom: 5px;
+        }
+        .details {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: var(--card-light);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px var(--shadow-light);
+        }
+        .details p {
+            margin: 10px 0;
+            font-size: 1em;
+        }
+        .details p strong {
+            color: var(--header-light);
+        }
+        .qr-code {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .qr-code img {
+            max-width: 150px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px var(--shadow-light);
+        }
+        .footer {
+            text-align: center;
+            padding: 15px;
+            background-color: var(--nav-light);
+            font-size: 0.9em;
+            color: white;
+        }
+        .toggle-theme {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background-color: var(--header-light);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            text-transform: uppercase;
+        }
+        .toggle-theme:hover {
+            background-color: var(--nav-hover-light);
+        }
+        body.dark {
+            background-color: var(--background-dark);
+            color: var(--text-dark);
+        }
+        body.dark .container {
+            background: var(--card-dark);
+            box-shadow: 0 4px 10px var(--shadow-dark);
+            border: 2px solid var(--header-dark);
+        }
+        body.dark .header {
+            background-color: var(--header-dark);
+        }
+        body.dark .nav {
+            background-color: var(--nav-dark);
+        }
+        body.dark .nav a:hover {
+            color: var(--nav-hover-dark);
+        }
+        body.dark .details {
+            background-color: var(--card-dark);
+            box-shadow: 0 1px 3px var(--shadow-dark);
+        }
+        body.dark .footer {
+            background-color: var(--nav-dark);
+            color: #ccc;
+        }
+        body.dark .toggle-theme {
+            background-color: var(--header-dark);
+        }
+    </style>
+</head>
+<body>
+    <button class="toggle-theme" onclick="toggleTheme()">Switch Theme</button>
+    <div class="container">
+        <div class="header">
+            <h1>Profile of [Name]</h1>
+        </div>
+        <div class="nav">
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Honored Veterans</a>
+        </div>
+        <div class="profile-photo">
+            <div class="carousel">
+                <img src="photos/2004.webp" alt="Military Service Photo">
+                <img src="photos/2024.webp" alt="Current Photo">
+            </div>
+            <div class="carousel-controls">
+                <button onclick="prevSlide()">&#10094;</button>
+                <button onclick="nextSlide()">&#10095;</button>
+            </div>
+        </div>
+        <div class="content">
+            <h2>Biography</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisi vel consectetur cursus, nisl nisi aliquet nisl, nec blandit nisl nisi eu orci. Suspendisse potenti. Fusce vehicula, tortor a semper malesuada, velit purus hendrerit eros, at condimentum arcu eros id felis. Curabitur eu facilisis nisl. Aenean ultrices, odio non interdum pellentesque, arcu neque auctor justo, ac molestie neque velit nec sapien.</p>
+            <p>Praesent efficitur, mauris a accumsan auctor, nisl est varius nunc, sit amet eleifend justo odio vel metus. Sed vehicula, nunc non venenatis volutpat, elit justo interdum dui, vel pellentesque neque justo non justo. Pellentesque et quam lacus. Sed a feugiat urna. Curabitur non lacinia lorem. Nulla posuere neque felis, id aliquet turpis pharetra non.</p>
+
+            <div class="details">
+                <p><strong>Date of Birth:</strong> January 1, 1980</p>
+                <p><strong>Date of Death:</strong> March 1, 2020</p>
+                <p><strong>Hometown:</strong> Springfield, IL</p>
+                <p><strong>Branch of Military:</strong> U.S. Army</p>
+                <p><strong>Tours Served:</strong> Operation Iraqi Freedom (2003-2004), Operation Enduring Freedom (2008-2009)</p>
+            </div>
+
+            <div class="qr-code">
+                <p>Scan the QR Code to learn more:</p>
+                <img src="https://via.placeholder.com/150.png?text=QR+Code" alt="QR Code">
+                <p><img src="https://via.placeholder.com/100x100.png?text=Army+Logo" alt="Branch Logo"></p>
+            </div>
+        </div>
+        <div class="footer">
+            &copy; 2024 Honor Profiles. All rights reserved.
+        </div>
+    </div>
+    <script>
+        let currentSlide = 0;
+
+        function showSlide(index) {
+            const carousel = document.querySelector('.carousel');
+            const slides = document.querySelectorAll('.carousel img');
+            if (index >= slides.length) {
+                currentSlide = 0;
+            } else if (index < 0) {
+                currentSlide = slides.length - 1;
+            } else {
+                currentSlide = index;
+            }
+            carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showSlide(currentSlide);
+        });
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+        }
+    </script>
+</body>
+</html>
